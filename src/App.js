@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from 'react';
+import FeedbackForm from './FeedbackForm';
+import FeedbackCard from './FeedbackCard';
 
 function App() {
+  const [feedbackList, setFeedbackList] = useState([]);
+
+  const addFeedback = (newFeedback) => {
+    const feedbackObject = {
+      id: feedbackList.length + 1, // You can generate a unique ID using a library like uuid
+      ...newFeedback,
+    };
+
+    setFeedbackList([...feedbackList, feedbackObject]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <FeedbackForm addFeedback={addFeedback} />
+      {feedbackList.length > 0 && (
+        <div>
+          <h2>Feedback Received:</h2>
+          {feedbackList.map((feedback, index) => (
+            <FeedbackCard key={index} feedback={feedback} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
